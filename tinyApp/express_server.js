@@ -19,14 +19,21 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  let r = generateRandomString();
+  if (res.statusCode === 200){
+      urlDatabase[r] = req.body.longURL;  // Log the POST request body to the console
+    }
+  res.redirect("/urls/" + r);         // Respond with 'Ok' (we will replace this)
 });
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL];
 
-
+  res.redirect(longURL);
+});
+;
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
   res.render("urls_show", templateVars);
@@ -39,3 +46,8 @@ app.get("/hello", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
+
+
+function generateRandomString() {
+  return Math.random().toString(36).substring(7);
+}

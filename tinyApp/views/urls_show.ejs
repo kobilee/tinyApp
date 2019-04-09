@@ -12,10 +12,10 @@
 
     <% include partials/_header %>
 
-    <p> <a href='#'>Create new tiny URL </a> </p>
+    <p> <a href="/urls/new">Create new tiny URL </a> </p>
     <!-- Add EJS code here -->
     <p> <b> tinyURL for <%= longURL%> </b> </p>
-    <p><%= shortURL %> </p>
+    <p><a href= "/u/<%= shortURL%>" > <%= shortURL %> </a></p>
 
     <p> <a href="/urls">index</a> </p>
 </body>
