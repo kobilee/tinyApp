@@ -16,7 +16,11 @@
     <p> <a href="/urls/new">Create new tiny URL </a> </p>
     <ul>
       <% for(var url in urls) { %>
-          <li> <b>URLS: </b> <a href= "/u/<%= url%>" > <%= url %></a> : <%= urls[url] %></li>
+          <li> <b>URLS: </b> <a href= "/u/<%= url%>" > <%= url %></a> : <%= urls[url] %>
+            <form method="POST" action="/urls/<%= url %>/delete">
+            <button type="submit" class="btn btn-primary">Delete</button>
+            </form>
+          </li>
       <% } %>
     </ul>
 
