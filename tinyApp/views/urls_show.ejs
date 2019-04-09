@@ -9,16 +9,14 @@
   <title>TinyApp</title>
 </head>
 <body style="font-size:20px; padding:50px;">
-    <!-- Add EJS code here -->
     <header>
-    <% include partials/_header %>
+        <% include partials/_header %>
     </header>
     <p> <a href='#'>Create new tiny URL </a> </p>
-    <ul>
-      <% for(var url in urls) { %>
-          <li> <b>URLS: </b> <%= url %> : <%= urls[url] %></li>
-      <% } %>
-    </ul>
+    <!-- Add EJS code here -->
+    <p> <b> tinyURl for <%= longURL%> </b> </p>
+    <p><%= shortURL %> </p>
 
+    <p> <a href="/urls">index</a> </p>
 </body>
 </html>
