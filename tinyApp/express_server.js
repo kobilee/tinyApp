@@ -1,8 +1,10 @@
 var express = require("express");
+var cookieParser = require('cookie-parser')
 var app = express();
 var PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser())
 app.set ("view engine", "ejs");
 
 var urlDatabase = {
@@ -10,14 +12,17 @@ var urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
-app.get("/", (req, res) => {
-  res.send("Hello!");
+//login
+app.post("/login", (req, res) => {
+  res.cookie("username", req.body.username);
+  res.redirect("/urls");
 });
-
-app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
-  res.render("urls_index", templateVars);
+//logout
+app.post("/logout", (req, res) => {
+  res.clearCookie("username");
+  res.redirect("/urls");
 });
+//creats new TinyURL
 app.post("/urls", (req, res) => {
   let r = generateRandomString();
   if (res.statusCode === 200){
@@ -25,22 +30,44 @@ app.post("/urls", (req, res) => {
     }
   res.redirect("/urls/" + r);         // Respond with 'Ok' (we will replace this)
 });
-app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+
+// delete from database
+app.post("/urls/:shortURL/delete", (req, res) => {
+  delete urlDatabase[req.params.shortURL];
+  res.redirect("/urls");
 });
+
+// update longURL
+app.post("/urls/:id", (req, res) => {
+  urlDatabase[req.params.id] = req.body.longURL;
+  res.redirect("/urls");
+});
+
+app.get("/", (req, res) => {
+  res.send("Hello!");
+});
+// links to index
+app.get("/urls", (req, res) => {
+  let templateVars = { urls: urlDatabase , username: req.cookies["username"]};
+  res.render("urls_index", templateVars);
+});
+
+// rendercreate URL page
+app.get("/urls/new", (req, res) => {
+  let templateVars =  {username: req.cookies["username"]}
+  res.render("urls_new", templateVars );
+});
+
+// links to longURL
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL];
 
   res.redirect(longURL);
 });
 
-app.post("/urls/:shortURL/delete", (req, res) => {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect("/urls");
-});
-
+// links to show ShortURL
 app.get("/urls/:shortURL", (req, res) => {
-  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL]};
+  let templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], username: req.cookies["username"]};
   res.render("urls_show", templateVars);
 });
 
