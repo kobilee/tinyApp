@@ -10,21 +10,18 @@
 </head>
 <body style="font-size:20px; padding:50px;">
 
-    <% include partials/_header %>
-
-    <p> <a href="/urls/new">Create new tiny URL </a> </p>
-    <!-- Add EJS code here -->
-    <p>ShortURL:<a href= "/u/<%= shortURL%>" > <%= shortURL %></a></p>
-     <!-- update longURL -->
-    <form class="form-inline" action="/urls/<%=shortURL%>/update" method="POST">
-      <div class="form-group mb-2">
-        <input class="form-control" type="text" name="longURL" placeholder="<%= longURL %>" style="width: 300px">
-        <button type="submit" >Update</button>
-      </div>
+    <form method="POST" action="/urls/register">
+      <label for="email">EmailL:</label>
+      <input type="text" placeholder="Enter email" name="email" required>
+      <label for="pawword">Password:</label>
+      <input type="text" placeholder="Enter password" name="password" required>
+      <button type="submit" >Submit</button>
     </form>
 
 
 
+
+
     <p> <a href="/urls">Index</a> </p>
-</body>
+  </body>
 </html>
