@@ -15,25 +15,33 @@ var urlDatabase = {
 };
 
 //login
-app.post("/urls/login", (req, res) => {
-  res.cookie("username", req.body.username);
-  res.redirect("/urls");
+app.post("/login", (req, res) => {
+  console.log(users);
+  console.log(findEmail(req.body.email));
+  if (findEmail(req.body.email) && findEmail(req.body.email).password === req.body.password){
+    res.cookie("user_id",findEmail(req.body.email));
+    res.redirect("/urls");
+  } else if (!findEmail(req.body.email)){
+    res.status(400).send("there is no account for that email");
+  } else if (findEmail(req.body.email).password !== req.body.password){
+    res.status(400).send("wrong password");
+  }
 });
+
 //logout
-app.post("/urls/logout", (req, res) => {
-  res.clearCookie("username");
+app.get("/logout", (req, res) => {
+  res.clearCookie("user_id");
   res.redirect("/urls");
 });
 // register
-app.post("/urls/register", (req, res) => {
+app.post("/register", (req, res) => {
     if (!findEmail(req.body.email)){
       console.log(findEmail(req.body.email));
       let r = generateRandomString();
-      res.cookie("user_id", r);
       users[r] = {id : r,
         email: req.body.email,
         password: req.body.password};
-      console.log("users: ",users);
+      res.cookie("user_id", users[r]);
       res.redirect("/urls");
     } else {
       res.status(400).send('email addrees already exists');;
@@ -69,8 +77,15 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 // link to register
-app.get("/urls/register", (req, res) => {
-  res.render("urls_register");
+app.get("/register", (req, res) => {
+  let templateVars =  {username: req.cookies["user_id"]}
+  res.render("urls_register", templateVars);
+});
+
+// link to login
+app.get("/login", (req, res) => {
+  let templateVars =  {username: req.cookies["user_id"]}
+  res.render("urls_login", templateVars);
 });
 // rendercreate URL page
 app.get("/urls/new", (req, res) => {
@@ -104,9 +119,8 @@ const findEmail = function(email){
   for (user of Object.values(users)){
       console.log("user: ",user);
      if (user.email === email){
-        return true;
+        return user;
      }
-
   }
   return false;
 };

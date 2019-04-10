@@ -13,7 +13,7 @@
 
     <% include partials/_header %>
 
-    <p> <a href="/urls/new">Create new tiny URL </a> </p>
+
     <ul>
       <% for(var url in urls) { %>
           <li> <b>TinyURLS: </b> <a href= "/u/<%= url%>" > <%= url %></a> : <%= urls[url] %> <a href=  "/urls/<%= url %>"> Edit </a>
