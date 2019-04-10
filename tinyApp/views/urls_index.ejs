@@ -16,7 +16,7 @@
 
     <ul>
       <% for(var url in urls) { %>
-          <li> <b>TinyURLS: </b> <a href= "/u/<%= url%>" > <%= url %></a> : <%= urls[url] %> <a href=  "/urls/<%= url %>"> Edit </a>
+          <li> <b>TinyURLS: </b> <a href= "/u/<%= url %>" > <%= url %></a> : <%= urls[url].longURL %> <a href=  "/urls/<%= url %>"> Edit </a>
             <form method="POST" action="/urls/<%= url %>/delete">
               <button type="submit" >Delete</button>
             </form>

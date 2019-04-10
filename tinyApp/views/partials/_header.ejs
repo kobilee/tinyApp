@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <!-- views/partials/header.ejs -->
 <h2> TinyApp </h2>
+  <p> <a href="/urls/new">Create new tiny URL </a> | <a href="/urls">URLS</a> </p></p>
 <% if (!username) { %>
   <p> <a href="/register">Register</a> | <a href="/login">Login</a> </p>
 <% } else { %>
-   <p> <a href="/urls/new">Create new tiny URL </a> | <a href="/urls">URLS</a> </p></p>
+
   <p>Logged in as: <%= username.email %>!</p>
    <form method="GET" action="/logout">
         <button type="submit" >Logout</button>
