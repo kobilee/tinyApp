@@ -4,6 +4,8 @@ TinyAPP is a full stack web application built in node and express that allows us
 
 ##Final Product
 
+!["Screenshot of create url page"](https://github.com/kobilee/w2d2/blob/master/tinyApp/docs/new_url_page.png)
+!["Screenshot of urls"](https://github.com/kobilee/w2d2/blob/master/tinyApp/docs/new_url_page.png)
 ##Dependancies 
 
 -bcrypt
