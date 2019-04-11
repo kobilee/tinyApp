@@ -74,9 +74,13 @@ app.post("/urls/:id/delete", (req, res) => {
 // edit url
 app.post("/urls/:id", (req, res) => {
   // make sure edited data belongs to the user
+  console.log(req.params.id);
+   console.log(urlDatabase);
   if(urlDatabase[req.params.id].userid ==  req.session.user_id.id){
-    urlDatabase[req.params.id] = req.body.longURL;
+    urlDatabase[req.params.id].longURL = req.body.longURL;
+
   }
+  console.log(urlDatabase);
   res.redirect("/urls");
 });
 

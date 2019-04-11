@@ -16,7 +16,7 @@
     <!-- Add EJS code here -->
     <p>ShortURL:<a href= "/u/<%= shortURL%>" > <%= shortURL %></a></p>
      <!-- update longURL -->
-    <form class="form-inline" action="/urls/<%=shortURL%>/update" method="POST">
+    <form class="form-inline" action="/urls/<%=shortURL%>" method="POST">
       <div class="form-group mb-2">
         <input class="form-control" type="text" name="longURL" placeholder="<%= longURL.longURL %>" style="width: 300px">
         &nbsp;  <button type="submit" > Update</button>
