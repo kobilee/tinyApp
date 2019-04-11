@@ -37,8 +37,9 @@ app.get("/logout", (req, res) => {
 });
 // register
 app.post("/register", (req, res) => {
-    const password = req.body.password; // found in the req.params object
+    const password = req.body.password;
     const hashedPassword = bcrypt.hashSync(password, 10);
+    // if the user doesnt already exist and to the datbase
     if (!findEmail(req.body.email)){
       let r = generateRandomString();
       users[r] = {id : r,
@@ -56,13 +57,14 @@ app.post("/urls", (req, res) => {
   if (res.statusCode === 200){
       urlDatabase[r] = {};
       urlDatabase[r].longURL = req.body.longURL;
-      urlDatabase[r].userid = req.session.user_id.id; // Log the POST request body to the console
+      urlDatabase[r].userid = req.session.user_id.id;
   }
-  res.redirect("/urls/" + r);         // Respond with 'Ok' (we will replace this)
+  res.redirect("/urls/" + r);
 });
 
 // delete from database
 app.post("/urls/:id/delete", (req, res) => {
+  // make sure deleted data belongs to the user
   if(urlDatabase[req.params.id].userid  ===  req.session.user_id.id){
     delete urlDatabase[req.params.id];
   }
@@ -71,12 +73,14 @@ app.post("/urls/:id/delete", (req, res) => {
 
 // edit url
 app.post("/urls/:id", (req, res) => {
+  // make sure edited data belongs to the user
   if(urlDatabase[req.params.id].userid ==  req.session.user_id.id){
     urlDatabase[req.params.id] = req.body.longURL;
   }
   res.redirect("/urls");
 });
 
+//root
 app.get("/", (req, res) => {
   if (req.session.user_id){
     res.redirect("/urls");
@@ -84,12 +88,14 @@ app.get("/", (req, res) => {
     res.redirect("/login");
   }
 });
+
 // links to index
 app.get("/urls", (req, res) => {
   let db = filterDB(urlDatabase, req);
   let templateVars = { urls: db, username: req.session.user_id};
   res.render("urls_index", templateVars);
 });
+
 // link to register
 app.get("/register", (req, res) => {
   let templateVars =  {username: req.session.user_id};
@@ -102,7 +108,7 @@ app.get("/login", (req, res) => {
   res.render("urls_login", templateVars);
 });
 
-// Link to create URL page
+// Link to new
 app.get("/urls/new", (req, res) => {
   if (req.session.user_id === null){
     res.render("urls_login");
@@ -115,14 +121,16 @@ app.get("/urls/new", (req, res) => {
 
 // links to longURL
 app.get("/u/:id", (req, res) => {
+  if (!urlDatabase[req.params.id]){
+    res.status(400).send('That is not a valid TinyURL');
+  }
   const longURL = urlDatabase[req.params.id].longURL;
-
   res.redirect(longURL);
 });
 
-// links to show ShortURL
+// links to show
 app.get("/urls/:id", (req, res) => {
-  console.log(req.session.user_id);
+
   if (req.session.user_id === null){
     res.status(400).send('You are not logged in');
 
@@ -139,15 +147,12 @@ app.get("/urls/:id", (req, res) => {
 
 });
 
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
-
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
-
+// returns user if email found otherwise false
 const findEmail = function(email){
+  //loop through users object
   for (user of Object.values(users)){
      if (user.email === email){
         return user;
@@ -155,6 +160,8 @@ const findEmail = function(email){
   }
   return false;
 };
+
+
 function filterDB(db, req){
   let new_db = {};
   if (req.session.user_id){
@@ -166,6 +173,7 @@ function filterDB(db, req){
   }
   return new_db;
 }
+
 function generateRandomString() {
   return Math.random().toString(36).substring(7);
 }

@@ -18,12 +18,11 @@
       <% for(var url in urls) { %>
         <table class="table table-hover" style="
             width: 73%;
-            margin: 0 auto;
-        ">
-          <tbody><tr><td> <b>TinyURLS: </b> <a href="/u/z68bul"> z68bul</a> : https://www.lighthouselabs.ca/</td>
-              <td><a href="/urls/z68bul"> Edit </a></td>
-            <td><form method="POST" action="/urls/z68bul/delete">
-              <button type="submit">Delete</button>
+            margin: 0 auto;">
+          <tbody><tr><td> <b>TinyURLS: </b> <a href= "/u/<%= url %>" > <%= url %></a> | <%= urls[url].longURL %></td>
+              <td><a href=  "/urls/<%= url %>"> Edit </a></td>
+            <td><form method="POST" action="/urls/<%= url %>/delete">
+              <button type="submit" >Delete</button>
             </form></td>
           </tr>
         </tbody></table>
@@ -32,6 +31,7 @@
   <% } else { %>
     <p> Please login or register</p>
   <% } %>
+
 
 </body>
 </html>
